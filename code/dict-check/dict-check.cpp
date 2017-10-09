@@ -63,6 +63,9 @@ class Checker : public clang::ast_matchers::MatchFinder::MatchCallback {
     auto& Diagnostics = Result.Context->getDiagnostics();
     const auto Name = Target->getName();
 
+    auto *Context = Result.Context;
+    if (!Target || !Context->getSourceManager().isInMainFile(Target->getLocation())) return;
+
     if (Words.count(Name.lower())) return;
 
     const auto ID =
